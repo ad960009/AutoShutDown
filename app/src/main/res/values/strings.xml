@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">AutoShutDown</string>
+    <string name="reboot">Reboot</string>
+</resources>
