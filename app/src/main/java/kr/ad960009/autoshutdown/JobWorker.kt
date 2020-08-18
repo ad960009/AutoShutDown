@@ -61,11 +61,17 @@ class JobWorker : JobService() {
         val isCharging: Boolean = status == BatteryManager.BATTERY_STATUS_CHARGING
                 || status == BatteryManager.BATTERY_STATUS_FULL
 
+        val batteryPct: Float? = batteryStatus?.let { intent ->
+            val level: Int = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
+            val scale: Int = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1)
+            level * 100 / scale.toFloat()
+        }
+
         // How are we charging?
         val chargePlug: Int = batteryStatus?.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1) ?: -1
         val usbCharge: Boolean = chargePlug == BatteryManager.BATTERY_PLUGGED_USB
         val acCharge: Boolean = chargePlug == BatteryManager.BATTERY_PLUGGED_AC
-        return isCharging
+        return isCharging || (batteryPct != null && batteryPct > 50)
     }
 
     fun CheckBattery() {
