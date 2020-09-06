@@ -17,7 +17,7 @@ class BootCompleteReceiver : BroadcastReceiver() {
 
     fun startService(context: Context) {
         val intent = Intent(context, ForegroundService::class.java)
-        intent.action = ForegroundService.startAction
+        intent.action = "org.prowl.torque"
         context.startForegroundService(intent)
     }
 

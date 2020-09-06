@@ -10,7 +10,6 @@ import android.content.IntentFilter
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import java.util.concurrent.TimeUnit
 
 class ForegroundService : Service() {
 
@@ -32,9 +31,31 @@ class ForegroundService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        MakeJob(this, JobWorker.START_TORQUE, 1000)
-        MakeJob(this, JobWorker.BATTERY_CHECK, TimeUnit.MINUTES.toMillis(1))
-        return START_NOT_STICKY
+        if (intent != null) {
+            Log.d("ad960009", "Foreground service start")
+            val pkgName = intent.action
+            if (pkgName == null) {
+                Log.d("ad960009", "Foreground service pkgName null")
+                return START_STICKY
+            }
+            if (pkgName.equals("")) {
+                Log.d("ad960009", "Foreground service pkgName empty")
+                return START_STICKY
+            }
+
+            val intent = packageManager.getLaunchIntentForPackage(pkgName)
+            if (intent != null) {
+                startActivity(intent)
+                Log.d("ad960009", "Start App $pkgName with ${intent.action}")
+                for (category in intent.categories) {
+                    Log.d("ad960009", "\tcategory: $category")
+                }
+            } else {
+                Log.d("ad960009", "Can't start App $pkgName intent null")
+            }
+        }
+
+        return START_STICKY
     }
 
     override fun onDestroy() {

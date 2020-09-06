@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">AutoShutDown</string>
     <string name="reboot">Reboot</string>
+    <string name="accessibility">백그라운드에서 앱 실행</string>
 </resources>

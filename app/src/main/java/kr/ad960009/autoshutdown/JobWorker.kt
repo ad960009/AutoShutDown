@@ -10,8 +10,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.BatteryManager
 import android.util.Log
-import java.io.BufferedReader
-import java.io.InputStreamReader
 import java.util.concurrent.TimeUnit
 
 val TAG = "ad960009"
@@ -93,6 +91,7 @@ class JobWorker : JobService() {
     }
 
     fun startTorque() {
+        /*
         val proc = Runtime.getRuntime()
             .exec("su -c am start -a android.intent.action.Main -n org.prowl.torque/org.prowl.torque.landing.FrontPage")
         proc.waitFor()
@@ -103,6 +102,11 @@ class JobWorker : JobService() {
             Log.d(TAG, line)
         }
         Log.d(TAG, "am start exit: ${proc.exitValue()}")
+        */
+
+        val serviceIntent = Intent(this, ForegroundService::class.java)
+        serviceIntent.action = "org.prowl.torque"
+        this.startService(serviceIntent)
     }
 
     companion object {
