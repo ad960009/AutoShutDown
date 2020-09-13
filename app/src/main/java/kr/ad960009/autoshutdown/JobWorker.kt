@@ -44,7 +44,10 @@ class JobWorker : JobService() {
                 CheckBattery()
             }
             START_TORQUE -> {
-                startTorque()
+                //startTorque()
+            }
+            POWER_OFF_NOW -> {
+                powerOffNow()
             }
         }
 
@@ -90,6 +93,10 @@ class JobWorker : JobService() {
             Runtime.getRuntime().exec("su -c svc power shutdown")
     }
 
+    fun powerOffNow() {
+        Runtime.getRuntime().exec("su -c svc power shutdown")
+    }
+
     fun startTorque() {
         /*
         val proc = Runtime.getRuntime()
@@ -113,5 +120,6 @@ class JobWorker : JobService() {
         val BATTERY_CHECK = 0
         val POWER_OFF = 1
         val START_TORQUE = 2
+        val POWER_OFF_NOW = 3
     }
 }

@@ -24,9 +24,7 @@ class MainActivityDummy : AppCompatActivity() {
         }
 
         val b = findViewById<Button>(R.id.button)
-        b.setOnClickListener { MakeJob(this, JobWorker.POWER_OFF, 1000) }
-
-
+        b.setOnClickListener { MakeJob(this, JobWorker.POWER_OFF_NOW, 1000) }
     }
 
     private fun checkForPermission(): Boolean {
