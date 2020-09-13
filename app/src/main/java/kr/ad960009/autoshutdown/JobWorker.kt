@@ -91,6 +91,8 @@ class JobWorker : JobService() {
         Log.d(TAG, "Charging in PowerOff: $isCharging")
         if (!isCharging)
             Runtime.getRuntime().exec("su -c svc power shutdown")
+        else
+            MakeJob(this, JobWorker.POWER_OFF, TimeUnit.MINUTES.toMillis(10))
     }
 
     fun powerOffNow() {
@@ -98,19 +100,6 @@ class JobWorker : JobService() {
     }
 
     fun startTorque() {
-        /*
-        val proc = Runtime.getRuntime()
-            .exec("su -c am start -a android.intent.action.Main -n org.prowl.torque/org.prowl.torque.landing.FrontPage")
-        proc.waitFor()
-        val reader = BufferedReader(InputStreamReader(proc.inputStream))
-
-        while (true) {
-            var line: String? = reader.readLine() ?: break
-            Log.d(TAG, line)
-        }
-        Log.d(TAG, "am start exit: ${proc.exitValue()}")
-        */
-
         val serviceIntent = Intent(this, ForegroundService::class.java)
         serviceIntent.action = "org.prowl.torque"
         this.startService(serviceIntent)

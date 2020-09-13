@@ -12,6 +12,11 @@ class TimerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_timer)
 
+        val time = savedInstanceState!!.getLong("time", 0)
+        if (time == 0L)
+        {
+            finishActivity(0)
+        }
         timerTextView = findViewById<TextView>(R.id.textViewTimer)
     }
 
@@ -42,7 +47,7 @@ class TimerActivity : AppCompatActivity() {
 
         override fun onFinish() {
             this@TimerActivity.timer = null
-
+            MakeJob(this@TimerActivity, JobWorker.POWER_OFF_NOW, 1000)
         }
     }
 }

@@ -1,15 +1,13 @@
 package kr.ad960009.autoshutdown
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.app.Service
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import java.util.concurrent.TimeUnit
 
 class ForegroundService : Service() {
 
@@ -43,16 +41,26 @@ class ForegroundService : Service() {
                 return START_STICKY
             }
 
-            val intent = packageManager.getLaunchIntentForPackage(pkgName)
-            if (intent != null) {
-                startActivity(intent)
-                Log.d("ad960009", "Start App $pkgName with ${intent.action}")
-                for (category in intent.categories) {
+            if (pkgName.startsWith("."))
+            {
+                val time = intent.getLongExtra("time", 0)
+                val timerIntent = Intent(this, TimerActivity::class.java)
+                timerIntent.putExtra("time", time)
+                timerIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                //startActivity(timerIntent)
+            }
+
+            val newIntent = packageManager.getLaunchIntentForPackage(pkgName)
+            if (newIntent != null) {
+                startActivity(newIntent)
+                Log.d("ad960009", "Start App $pkgName with ${newIntent.action}")
+                for (category in newIntent.categories) {
                     Log.d("ad960009", "\tcategory: $category")
                 }
             } else {
                 Log.d("ad960009", "Can't start App $pkgName intent null")
             }
+            MakeJob(this, JobWorker.POWER_OFF, TimeUnit.MINUTES.toMillis(10))
         }
 
         return START_STICKY
